@@ -1,0 +1,99 @@
+spring:
+  application:
+    name: chat-studio
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 10MB
+      max-request-size: 10MB
+  data:
+    mongodb:
+      host: 127.0.0.1
+      port: 27017
+      database: db_chat
+  datasource:
+    druid:
+      initial-size: 10
+      max-active: 128
+      min-idle: 5
+      max-wait: 80000
+      pool-prepared-statements: true
+      max-pool-prepared-statement-per-connection-size: 20
+      validation-query: SELECT 1 FROM DUAL
+      validation-query-timeout: 30000
+      test-on-borrow: false
+      test-on-return: false
+      test-while-idle: true
+      filters: stat,wall,slf4j
+      filter:
+        stat:
+          enabled: true
+          db-type: mysql
+          log-slow-sql: true
+          slow-sql-millis: 10000
+        slf4j:
+          enabled: true
+          statement-log-error-enabled: true
+          statement-create-after-log-enabled: false
+          statement-close-after-log-enabled: false
+          result-set-open-after-log-enabled: false
+          result-set-close-after-log-enabled: false
+      web-stat-filter:
+        enabled: true
+        url-pattern: /* # 过滤所有url
+        exclusions: "*.js,*.gif,*.jpg,*.png,*.css,*.ico,/druid/*" # 排除一些不必要的url
+        session-stat-enable: true       # 开启session统计功能
+        session-stat-max-count: 1000 # session的最大个数,默认100
+      stat-view-servlet:
+        enabled: true                   # 启用StatViewServlet
+        url-pattern: /druid/* # 访问内置监控页面的路径，内置监控页面的首页是/druid/index.html
+        reset-enable: false              # 不允许清空统计数据,重新计算
+        login-username: root # 配置监控页面访问密码
+        login-password: 123
+        allow: 127.0.0.1 # 允许访问的地址，如果allow没有配置或者为空，则允许所有访问
+        deny: # 拒绝访问的地址，deny优先于allow，如果在deny列表中，就算在allow列表中，也会被拒绝
+    type: com.alibaba.druid.pool.DruidDataSource
+    url: jdbc:mysql://127.0.0.1:3306/chat_studio?useSSL=false&characterEncoding=utf-8&rewriteBatchedStatements=true
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: mingge123
+
+app:
+  debug-mode: true
+
+oss:
+  endpoint: http://127.0.0.1:9000
+  access-key: QEadxvmvguY3XYvpvkUM
+  secret-key: ZCEeMEbx9Ckudm9V1Z1XOXSFdm8DW5KecSfNdgZ9
+  default-bucket-name: default
+  default-object-key-format: default_%s_%s.%s
+  default-path-style-access: public
+  doc:
+    bucket-name: default-doc
+    path-style-access: doc
+    object-key-format: doc_%s_%s.%s
+
+langchain4j:
+  open-ai:
+    embedding-model:
+      api-key:
+      model-name: text-embedding-v2
+      dimensions: 1536
+      base-url: https://dashscope.aliyuncs.com/compatible-mode/v1
+    streaming-chat-model:
+      api-key:
+      base-url: https://api.deepseek.com
+      model-name: deepseek-chat
+      temperature: 1.3
+      max-retries: 0
+    chat-model:
+      api-key:
+      base-url: https://api.deepseek.com
+      model-name: deepseek-chat
+      temperature: 1.3
+      max-retries: 0
+
+mybatis-plus:
+  configuration:
+    map-underscore-to-camel-case: true
+    local-cache-scope: statement

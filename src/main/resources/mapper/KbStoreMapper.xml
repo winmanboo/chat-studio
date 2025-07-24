@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.winmanboo.chatstudio.mapper.KbStoreMapper">
+
+    <select id="getStoreListByUserId" resultType="com.winmanboo.chatstudio.entity.KbStore">
+        select kb_store.*
+        from kb
+                 left join user on user.user_id = #{userId}
+                 left join kb_store on kb.id = kb_store.kb_id
+        order by kb_store.upload_date desc
+    </select>
+</mapper>

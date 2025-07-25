@@ -1,21 +1,27 @@
 package com.winmanboo.chatstudio.exception;
 
 
-public class ChatException extends RuntimeException {
-  
-  public ChatException(String message) {
-    super(message);
+import com.winmanboo.chatstudio.exception.code.ErrorCode;
+
+public class ChatException extends BaseException {
+
+  public ChatException(ErrorCode errorCode) {
+    super(errorCode);
   }
-  
-  public ChatException(String message, Throwable cause) {
-    super(message, cause);
+
+  public ChatException(String message, ErrorCode errorCode) {
+    super(message, errorCode);
   }
-  
-  public ChatException(Throwable cause) {
-    super(cause);
+
+  public ChatException(String message, Throwable cause, ErrorCode errorCode) {
+    super(message, cause, errorCode);
   }
-  
-  public ChatException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
-    super(message, cause, enableSuppression, writableStackTrace);
+
+  public ChatException(Throwable cause, ErrorCode errorCode) {
+    super(cause, errorCode);
+  }
+
+  public ChatException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace, ErrorCode errorCode) {
+    super(message, cause, enableSuppression, writableStackTrace, errorCode);
   }
 }

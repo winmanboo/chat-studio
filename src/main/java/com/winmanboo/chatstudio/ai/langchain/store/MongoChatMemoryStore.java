@@ -24,6 +24,8 @@ import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
 import static com.winmanboo.chatstudio.entity.Message.DEFAULT_START_ID;
+import static com.winmanboo.chatstudio.exception.code.ChatErrorCode.FIRST_MESSAGE_ERROR;
+import static com.winmanboo.chatstudio.exception.code.ChatErrorCode.SESSION_NOT_EXIST;
 
 @Slf4j
 @Component
@@ -38,7 +40,7 @@ public class MongoChatMemoryStore implements ChatMemoryStore {
   public List<ChatMessage> getMessages(Object memoryId) {
     Session session = mongoTemplate.findOne(Query.query(Criteria.where("sessionId").is(memoryId)), Session.class);
     if (session == null) {
-      throw new ChatException("session not found");
+      throw new ChatException(SESSION_NOT_EXIST);
     }
     return session.getMessages().stream().map(message -> {
       if (message.getMessageType() == Message.Type.USER.getValue()) {
@@ -78,13 +80,13 @@ public class MongoChatMemoryStore implements ChatMemoryStore {
     Query sessionIdQuery = Query.query(Criteria.where("sessionId").is(memoryId));
     Session session = mongoTemplate.findOne(sessionIdQuery, Session.class);
     if (session == null) {
-      throw new ChatException("session not found");
+      throw new ChatException(SESSION_NOT_EXIST);
     }
     List<Message> sessionMessageList = session.getMessages();
     // 用户第一次在当前会话查询
     if (sessionMessageList.isEmpty()) {
       if (!(message instanceof UserMessage)) {
-        throw new ChatException("first message must be user message");
+        throw new ChatException(FIRST_MESSAGE_ERROR);
       }
       // 更新标题
       Executors.newFixedThreadPool(1).submit(updateSessionTitle((UserMessage) message, memoryId));

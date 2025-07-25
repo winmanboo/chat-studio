@@ -21,7 +21,9 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
+
+import static com.winmanboo.chatstudio.exception.code.ChatErrorCode.CREATE_SESSION_FAILED;
+import static com.winmanboo.chatstudio.exception.code.ChatErrorCode.SESSION_NOT_EXIST;
 
 @Service
 @RequiredArgsConstructor
@@ -44,7 +46,7 @@ public class ChatServiceImpl implements ChatService {
       mongoTemplate.insert(session);
       return memoryId;
     } else {
-      throw new ChatException("创建会话失败");
+      throw new ChatException(CREATE_SESSION_FAILED);
     }
   }
 
@@ -60,7 +62,7 @@ public class ChatServiceImpl implements ChatService {
   public List<Message> messages(String sessionId) {
     Session session = mongoTemplate.findById(sessionId, Session.class);
     if (session == null) {
-      throw new ChatException("session not exist.");
+      throw new ChatException(SESSION_NOT_EXIST);
     }
     return session.getMessages()
         .stream().peek(message -> {

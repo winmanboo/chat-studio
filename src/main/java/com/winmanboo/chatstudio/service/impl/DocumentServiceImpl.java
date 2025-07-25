@@ -6,7 +6,7 @@ import com.winmanboo.chatstudio.config.OssProperties;
 import com.winmanboo.chatstudio.context.UserInfoContext;
 import com.winmanboo.chatstudio.entity.KbStore;
 import com.winmanboo.chatstudio.enums.UploadFileStatus;
-import com.winmanboo.chatstudio.exception.ServerException;
+import com.winmanboo.chatstudio.exception.BizException;
 import com.winmanboo.chatstudio.service.DocumentService;
 import com.winmanboo.chatstudio.service.KbService;
 import com.winmanboo.chatstudio.service.KbStoreService;
@@ -25,6 +25,9 @@ import java.io.IOException;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executors;
+
+import static com.winmanboo.chatstudio.exception.code.BizErrorCode.*;
+import static com.winmanboo.chatstudio.exception.code.KnowledgeBaseErrorCode.KB_NOT_EXIST;
 
 @Slf4j
 @Service
@@ -48,17 +51,13 @@ public class DocumentServiceImpl implements DocumentService {
   @Override
   public void uploadDoc(Long kbId, MultipartFile file) throws IOException {
     log.info("upload doc start");
-    if (file == null || file.getBytes().length == 0) {
-      throw new ServerException("文件为空");
+    if (file == null) {
+      throw new BizException(FILE_NOT_EXIST);
     }
     String fileName = file.getOriginalFilename();
-    if (fileName == null) {
-      throw new ServerException("文件异常");
-    }
-
     String userId = UserInfoContext.get().getUserId();
     if (!kbService.isKbExists(userId, kbId)) {
-      throw new ServerException("知识库不存在");
+      throw new BizException(KB_NOT_EXIST);
     }
     
     String prefix = FileUtil.getPrefix(fileName);
@@ -75,7 +74,7 @@ public class DocumentServiceImpl implements DocumentService {
     CompletableFuture<TokenUsage> analyzeFuture = uploadFuture.thenApplyAsync(completedUpload -> {
       if (!completedUpload.response().sdkHttpResponse().isSuccessful()) {
         kbStoreService.updateStatus(kbStore.getId(), UploadFileStatus.UPLOAD_FAILED);
-        throw new ServerException("文件上传失败");
+        throw new BizException(FILE_UPLOAD_FAILED);
       }
       // 2. load document
       Document document = documentLoaderTool.loadDocumentForUserId(userId, doc.getBucketName(), key);

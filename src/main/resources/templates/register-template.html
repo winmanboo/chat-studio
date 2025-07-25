@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="'欢迎注册 ' + ${appName}">欢迎注册</title>
+    <style>
+        /* Element Plus 风格基础 */
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #606266;
+            background-color: #f5f7fa;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 0 15px;
+        }
+        .email-card {
+            background: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            border: 1px solid #e4e7ed;
+        }
+        .email-header {
+            padding: 25px;
+            background: linear-gradient(135deg, #409eff 0%, #66b1ff 100%);
+            color: white;
+            text-align: center;
+        }
+        .email-body {
+            padding: 30px;
+        }
+        .email-footer {
+            padding: 15px;
+            text-align: center;
+            font-size: 12px;
+            color: #909399;
+            border-top: 1px solid #e4e7ed;
+            background-color: #fafafa;
+        }
+        .welcome-title {
+            font-size: 24px;
+            margin-top: 10px;
+            color: white;
+        }
+        .action-card {
+            background: #f5f7fa;
+            border-radius: 4px;
+            padding: 20px;
+            margin: 25px 0;
+            border-left: 4px solid #409eff;
+        }
+        .verify-button {
+            display: inline-block;
+            background: #409eff;
+            color: white !important;
+            text-decoration: none;
+            padding: 12px 24px;
+            border-radius: 4px;
+            font-weight: 500;
+            margin: 15px 0;
+        }
+        .verify-button:hover {
+            background: #66b1ff;
+        }
+        .divider {
+            height: 1px;
+            background: #e4e7ed;
+            margin: 25px 0;
+        }
+        .step {
+            display: flex;
+            margin-bottom: 15px;
+            align-items: center;
+        }
+        .step-number {
+            width: 24px;
+            height: 24px;
+            background: #409eff;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 10px;
+            flex-shrink: 0;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="email-card">
+        <!-- 头部 -->
+        <div class="email-header">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" fill="white" stroke="white" stroke-width="2"/>
+                <path d="M12 16V12M12 8H12.01" stroke="#409EFF" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+            <h1 class="welcome-title" th:text="'欢迎注册 ' + ${appName}">欢迎注册</h1>
+        </div>
+
+        <!-- 正文内容 -->
+        <div class="email-body">
+            <p>尊敬的 <strong th:text="${username}">用户</strong>，您好！</p>
+            <p>感谢您注册 <span th:text="${appName}">我们的服务</span>，请完成以下验证步骤激活账户：</p>
+
+            <!-- 激活卡片 -->
+            <div class="action-card">
+                <p style="margin-top: 0;">您的账户验证码：</p>
+                <div style="font-size: 28px; font-weight: bold; color: #409eff; text-align: center; letter-spacing: 2px;"
+                     th:text="${verificationCode}">ABCD123</div>
+                <p style="text-align: center; color: #909399; margin-bottom: 0;">(有效期 <span th:text="${expireMinutes}">5</span> 分钟)</p>
+            </div>
+
+            <!-- 使用步骤 -->
+            <div class="divider"></div>
+            <h3 style="margin-top: 0;">如何完成注册？</h3>
+
+            <div class="step">
+                <div class="step-number">1</div>
+                <div>返回注册页面或应用</div>
+            </div>
+            <div class="step">
+                <div class="step-number">2</div>
+                <div>输入上述验证码</div>
+            </div>
+            <div class="step">
+                <div class="step-number">3</div>
+                <div>完成账户激活</div>
+            </div>
+
+            <!-- 安全提示 -->
+            <div class="divider"></div>
+            <p style="color: #f56c6c; font-size: 14px;">
+                <strong>安全提示：</strong>请勿向任何人泄露此验证码！我们的工作人员不会向您索要验证码。
+            </p>
+        </div>
+
+        <!-- 页脚 -->
+        <div class="email-footer">
+            <p>© <span th:text="${year}">2024</span> <span th:text="${appName}">AppName</span>. All rights reserved.</p>
+            <p style="margin-top: 5px;">
+                如需帮助，请联系 <a href="mailto:support@yourdomain.com" style="color: #409eff;">support@yourdomain.com</a>
+            </p>
+        </div>
+    </div>
+</div>
+</body>
+</html>
